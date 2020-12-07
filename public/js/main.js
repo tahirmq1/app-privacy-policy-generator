@@ -1,16 +1,22 @@
-/*  Copyright 2017 Nishant Srivastava
+/*  
+    App Privacy Policy Generator: A simple web app to generate a generic 
+    privacy policy for your Android/iOS apps
 
-    Licensed under the Apache License, Version 2.0 (the "License")
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
+    Copyright (C) 2020  Nishant Srivastava
 
-       http://www.apache.org/licenses/LICENSE-2.0
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License. */
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 var app = new Vue({
   el: "#app",
@@ -19,8 +25,8 @@ var app = new Vue({
     typeOfApp: "",
     typeOfAppTxt: "[open source/free/freemium/ad-supported/commercial]",
     typeOfDev: "",
-    appName: "[App name]",
-    appContact: "[App contact information]",
+    appName: "",
+    appContact: "",
     myOrOur: "[my/our]",
     meOrUs: "[me/us]",
     atNoCost: "[at no cost]",
@@ -37,6 +43,7 @@ var app = new Vue({
     requirementOfSystem: "system",
     thirdPartyServices: thirdPartyServicesJsonArray,
     showPrivacyModal: false,
+    showGDPRPrivacyModal: false,
     showTermsModal: false,
     showDisclaimerModal: false,
     hasThirdPartyServicesSelected: true,
@@ -57,6 +64,18 @@ var app = new Vue({
     },
     nextStep: function () {
       if (this.wizardStep <= this.totalWizardSteps) {
+        if (this.wizardStep == 1) {
+          if (this.appName.length == 0 || this.appName == "" || this.appName == null || this.appName == "Please provide an App Name!") {
+            this.appName = "Please provide an App Name!"
+            return
+          }
+
+          if (this.appContact.length == 0 || this.appContact == "" || this.appContact == null || this.appContact == "Please provide contact info!") {
+            this.appContact = "Please provide contact info!"
+            return
+          }
+        }
+
         this.wizardStep += 1
       }
     },
@@ -164,6 +183,12 @@ var app = new Vue({
       this.hasThirdPartyServicesSelected = this.checkForThirdPartyServicesEnabled()
       this.contentRenderType = 1
       this.showPrivacyModal = !this.showPrivacyModal
+    },
+    toggleGDPRPrivacyModalVisibility: function () {
+      this.generate()
+      this.hasThirdPartyServicesSelected = this.checkForThirdPartyServicesEnabled()
+      this.contentRenderType = 1
+      this.showGDPRPrivacyModal = !this.showGDPRPrivacyModal
     },
     toggleTermsModalVisibility: function () {
       this.generate()
